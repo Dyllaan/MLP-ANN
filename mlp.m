@@ -177,8 +177,8 @@ end
 function ObjFcn = makeObjFcn(x, t)
     ObjFcn = @auPRCFun;
     function [auPRC,constraints,file] = auPRCFun(vars)
-        % Create the network using patternnet, it appears to perform much
-        % better with this network
+        % Create the network using fitnnet, it appears to perform much
+        % better with this network than other feed forward networks
         net = fitnet([vars.Layer1Size vars.Layer2Size], 'trainlm');
         % Set training parameters to optimise
         net.trainParam.mc = vars.Momentum;
@@ -286,7 +286,7 @@ function [targets, predictions] = trainGridModel(data, testData)
         for j = 1:numel(epochs)
             for k = 1:numel(max_fails)
                 for n = 1:numel(trainingFunctions)
-                    %create the network
+                    % Create the network
                     net = fitnet(hiddenLayerSizes{i}, trainingFunctions{n});
                     %change the hyperparameters
                     net.trainParam.epochs = epochs(j);
@@ -298,7 +298,7 @@ function [targets, predictions] = trainGridModel(data, testData)
                     net.divideParam.valRatio = 15/100;
                     net.divideParam.testRatio = 15/100;
                     net.performFcn = 'mse';
-                    %train the network
+                    % Train the network
                     [net, ~] = train(net, inputs, targets);
                     % Testing the network on the train set
                     predictions = net(inputs);
@@ -369,7 +369,7 @@ function printConfusionMatrix(cm)
     tn = cm(1,1);
     fp = cm(1,2);
     fn = cm(2,1);
-    %Calculating the accuracy score using confusion matrix results.
+    % Calculating the accuracy score using confusion matrix results.
     accuracy = (tp + tn) / (tp + tn + fp + fn);
     precision = tp / (tp + fp);
     recall = tp / (tp + fn);
